@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+//const client = new Discord.Client();
 
 module.exports = {
    reactionRole: function(channel) {
@@ -17,6 +18,11 @@ module.exports = {
             embed.react(publicApproveEmoji);
         });
 
+        client.on("messageReactionAdd", (reaction, user) =>{
+            if (reaction.emoji.name == botApproveEmoji) {
+                console.log("Bot Approved");
+            }
+        })
     }  
 }
 

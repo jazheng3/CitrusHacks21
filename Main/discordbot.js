@@ -2,11 +2,6 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const commands = require('./commands');
 
-
-
-
-
-
 client.on("ready", () => {
   console.log('Logged in as ${client.user.tag}!')
 })
@@ -93,17 +88,18 @@ client.on("message", msg => {
     });
   }
 })
+
 client.on("message", msg => {
-  if (msg === "-reactionbot") {
+  if (msg === '-reactionrole') {
     commands.reactionRole(msg.channel);
   }
 })
 
 client.login('ODMwMzEwMzA5NzY3Njc1OTc0.YHE0vA.3UaDnhS1L72oiJZjyQsvrkC6Dzg');
 
-var nextDate = new Date();
+/*var nextDate = new Date();
 if (nextDate.getMinutes() === 0) { // You can check for seconds here too
-    callEveryHour()
+    //callEveryHour()
 } else {
     nextDate.setHours(nextDate.getHours() + 1);
     nextDate.setMinutes(0);
@@ -115,4 +111,4 @@ if (nextDate.getMinutes() === 0) { // You can check for seconds here too
 
 function sendReminder() {
   setInterval(yourFunction, 1000 * 60 * 60);
-}
+} */
