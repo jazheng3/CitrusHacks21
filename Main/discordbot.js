@@ -64,14 +64,14 @@ function printStretch(userDM){
 client.on("message", msg => {
   if (msg.content === "water") {
     messageAuthor = msg.author;
-    msg.channel.send("Time to drink some water! React 👍 if you've already drank water in the past hour!");
+    msg.channel.send("Time to drink some water! React 👍 after taking a drink!");
   }
 })
 
 client.on("message", msg => {
-  if (msg.content === "Time to drink some water! React 👍 if you've already drank water in the past hour!") {
+  if (msg.content === "Time to drink some water! React 👍 after taking a drink!") {
     const filter = (reaction, user) => {
-      return reaction.emoji.name === '👍' ;
+      return reaction.emoji.name === '👍';
     };
 
     const collector = msg.createReactionCollector(filter, { time: 15000 });
