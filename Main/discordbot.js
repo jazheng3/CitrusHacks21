@@ -1,5 +1,7 @@
+
 const Discord = require('discord.js');
 const client = new Discord.Client();
+const commands = require('./commands');
 
 client.on("ready", () => {
   console.log('Logged in as ${client.user.tag}!')
@@ -57,4 +59,9 @@ client.on("presenceUpdate", (oldPres, newPres) => {
   });
 })
 
+client.on("message", msg => {
+  if (msg === "-reactionbot") {
+    commands.reactionRole(msg.channel);
+  }
+})
 client.login('ODMwMzEwMzA5NzY3Njc1OTc0.YHE0vA.3UaDnhS1L72oiJZjyQsvrkC6Dzg');
