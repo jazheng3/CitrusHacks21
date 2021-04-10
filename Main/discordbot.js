@@ -17,13 +17,41 @@ client.on("message", msg => {
   }
 })
 
+client.on("message", msg => {
+  if (msg.content === "water") {
+    messageAuthor = msg.author;
+    msg.channel.send("Time to drink some water! React 👍 if you've already drank water in the past hour!");
+  }
+})
+
+client.on("message", msg => {
+  if (msg.content === "Time to drink some water! React 👍 if you've already drank water in the past hour!") {
+    const filter = (reaction, user) => {
+      return reaction.emoji.name === '👍' ;
+    };
+
+    const collector = msg.createReactionCollector(filter, { time: 15000 });
+
+    collector.on('collect', (reaction, user) => {
+      console.log(`Collected ${reaction.emoji.name} from ${user.tag}`);
+      msg.react('👊');
+      msg.channel.send(`Good job @${user.tag}! Now you can go back to playing games.`);
+    });
+
+    collector.on('end', collected => {
+      console.log(`Collected ${collected.size} items`);
+      collector.stop();
+    });
+  }
+})
+
 client.on("presenceUpdate", (oldPres, newPres) => {
-  oldPres.user.createDM().then( dmCh => {
-    dmCh.send("Presence Changed, " + oldPres.activities[0].name + 
-      ", "+ oldPres.activities[0].details + " to " + 
-      newPres.activities[0].name + 
-      ", "+ newPres.activities[0].details);
-    
+  oldPres.user.createDM().then(dmCh => {
+    dmCh.send("Presence Changed, " + oldPres.activities[0].name +
+      ", " + oldPres.activities[0].details + " to " +
+      newPres.activities[0].name +
+      ", " + newPres.activities[0].details);
+
   }).catch(error => {
     console.log(error + ", Error in creating DM");
   });
