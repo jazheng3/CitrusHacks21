@@ -11,6 +11,8 @@
 
 **Activity Manager**
 
+***Has methods that track activity (games, water) and returns stuff***
+
 **Interpreter of Activities and Time**
 
 **Daily Report Generator**
