@@ -1,8 +1,0 @@
-class Users {
-    constructor(discordusername) {
-
-    }
-
-    
-}
-
