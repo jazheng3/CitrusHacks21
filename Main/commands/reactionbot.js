@@ -28,12 +28,12 @@ module.exports = {
         collector.on('collect', (reaction, user) => {
             let newUser = new storage.User(user.tag, user.id);
             userList.push(newUser);
-            console.log(newUser);
-            console.log(userList);
+            //console.log(newUser);
+            //console.log(userList);
         });
       
         collector.on('end', collected => {
-            console.log(`Collected ${collected.size} items`);
+            message.channel.send("Please use the command again, previous has expired!")
         });
     }  
 }
