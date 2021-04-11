@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const commands = require('./commands.js');
-
+let users = [];
 
 
 
@@ -73,11 +73,6 @@ client.on("message", msg => {
   }
 })
 
-client.on("message", msg => {
-  if (msg.content === "-reactionrole") {
-    commands.reactionRole(msg.channel);
-  }
-})
 
 client.on("message", msg => {
   if (msg.content === "Time to drink some water! React 👍 after taking a drink!") {
@@ -99,11 +94,19 @@ client.on("message", msg => {
     });
   }
 })
+
 client.on("message", msg => {
   if (msg === "-reactionbot") {
     commands.reactionRole(msg.channel);
   }
 })
+
+client.on("message", msg => {
+  if (msg.content === "-reactionrole") {
+    commands.reactionRole(msg.channel);
+  }
+})
+
 
 client.login('ODMwMzEwMzA5NzY3Njc1OTc0.YHE0vA.3UaDnhS1L72oiJZjyQsvrkC6Dzg');
 
@@ -111,14 +114,14 @@ client.login('ODMwMzEwMzA5NzY3Njc1OTc0.YHE0vA.3UaDnhS1L72oiJZjyQsvrkC6Dzg');
 /**
  var nextDate = new Date();
  if (nextDate.getMinutes() === 0) { // You can check for seconds here too
-    callEveryHour()
+    sendReminder()
 } else {
     nextDate.setHours(nextDate.getHours() + 1);
     nextDate.setMinutes(0);
     nextDate.setSeconds(0);// I wouldn't do milliseconds too ;)
 
     var difference = nextDate - new Date();
-    setTimeout(callEveryHour, difference);
+    setTimeout(sendReminder, difference);
 }
 
 function sendReminder() {
