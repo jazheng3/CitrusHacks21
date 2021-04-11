@@ -4,7 +4,7 @@ const reactBotCommand = require('./commands/reactionbot.js');
 
 
 var myChannel;
-userList = new Set();
+let userSet = new Set();
 
 client.on("ready", () => {
   console.log('Logged in as ${client.user.tag}!')
@@ -21,7 +21,7 @@ client.on("message", msg => {
     msg.reply(msg.author.presence.activities);
   }
 })
-}
+
 
 /*
 client.on("presenceUpdate", (oldPres, newPres) => {
@@ -75,17 +75,14 @@ client.on("message", msg => {
 })
 
 function waterBreak() {
-  console.log("printing?");
-  for (var k in client.channels.cache){
-    console.log("Channel");
-    client.channels.cache[k].channel.send("Time to drink some water! React 👍 after taking a drink!");
-  }
-  
+  myChannel.send("Time to drink some water! React 👍 after taking a drink!");
+
 }
 
 client.on("message", msg => {
   if (msg.content === "Time to drink some water! React 👍 after taking a drink!") {
     congralutoryWater(msg);
+    
   }
 })
 
@@ -99,7 +96,9 @@ function congralutoryWater(msg) {
   collector.on('collect', (reaction, user) => {
     console.log(`Collected ${reaction.emoji.name} from ${user.tag}`);
     msg.react('👊');
+    usernameToUser(user).addWater();
     msg.channel.send(`Good job @${user.tag}! Now you can go back to playing games.`);
+    myChannel.send("You have drank water " + usernameToUser(user).numWaterBreaks + " today!");
   });
 
   collector.on('end', collected => {
@@ -112,8 +111,25 @@ function congralutoryWater(msg) {
 
 
 client.on("message", msg => {
-  if (msg.content === "-reactionbot") {
-      reactBotCommand.executes(msg);
+  if (msg.content === "-reactionrole") {
+    commands.reactionRole(msg.channel);
+
+    const filter = (reaction, user) => {
+      return reaction.emoji.name === '👍' && user.id === user.id;
+    };
+
+    const collector = msg.createReactionCollector(filter, { time: 100000 });
+
+    collector.on('collect', (reaction, user) => {
+      let ben = new storage.User(user.tag, user.id);
+      userSet.push(ben);
+      console.log(`Collected ${reaction.emoji.name} from ${user.tag}`);
+      console.log(userSet);
+    });
+
+    collector.on('end', collected => {
+      console.log(`Collected ${collected.size} items`);
+    });
   }
 })
 
@@ -140,4 +156,13 @@ function makeHourlyReminders() {
 
 function sendReminder() {
   return setInterval(waterBreak, 3000);
+}
+
+function usernameToUser(username) {
+  for(user in userSet) {
+    if(user.discordID = username.id) {
+      return user;
+    }
+  }
+  return null;
 }

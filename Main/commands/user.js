@@ -1,5 +1,4 @@
  class User {
-    waterList = [];
     constructor(discordUsername, discordID) {
         this.discordUsername = discordUsername;
         this.discordID = discordID;
@@ -9,8 +8,8 @@
         this.numWaterBreaks = 0;
     }
 
-    addWater(time) {
-        waterList.push(time);
+    addWater() {
+        this.numWaterBreaks++;
     }
 }
 
