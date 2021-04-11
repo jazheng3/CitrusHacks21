@@ -11,8 +11,8 @@ module.exports = {
           
             collector.on('collect', (reaction, user) => {
               console.log(`Collected ${reaction.emoji.name} from ${user.tag}`);
-              msg.react('👊');
-              msg.channel.send(`Good job @${user.tag}! Now you can go back to playing games.`);
+              message.react('👊');
+              message.channel.send(`Good job @${user.tag}! Now you can go back to playing games.`);
               return user.id;
             });
           

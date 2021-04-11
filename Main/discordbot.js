@@ -114,8 +114,11 @@ client.on("message", msg => {
 })
 
 client.on("message", msg => {
+  console.log("meme");
   if(msg.content === "!leaderboard") {
+    console.log("if");
     for (num in leaderboard()) {
+      console.log("for?");
       console.log(num);
     }
   }
@@ -138,8 +141,10 @@ function usernameToUser(username) {
 }
 
 function leaderboard() {
+  console.log("leaderboard");
   waterList = [];
   for(user in userList) {
+    console.log("user");
     waterList.push(user.numWaterBreaks);
   }
   waterList.sort();

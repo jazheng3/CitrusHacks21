@@ -15,7 +15,7 @@ module.exports = {
       return setTimeout(sendReminder, 3000);
     }
     function sendReminder() {
-      return setInterval(waterBreak, 3000);
+      return setInterval(waterBreak, 20000);
     }
   
     function waterBreak() {
