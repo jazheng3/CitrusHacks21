@@ -3,6 +3,8 @@ const client = new Discord.Client();
 const reactBotCommand = require('./commands/reactionbot.js');
 const waterReminder = require('./commands/water.js');
 const waterCelebrate = require('./commands/waterCongrat.js');
+const stretch_msg1 = "Time to stretch!", stretch_msg2 = "placeholder", stretch_msg3 = "placeholder";
+let stretch_msgs = [stretch_msg1, stretch_msg2, stretch_msg3];
 
 
 userList = [];
@@ -43,7 +45,7 @@ client.on("presenceUpdate", (oldPres, newPres) => {
   oldActivity = null;
   newActivity = null;
   for (i = 0; i < newPres.activities.length; i++) {
-    if (newPres.activities[i].type == "PLAYING") {
+    if (newPres.activities[i].type == "PLAYING") { // When entering a game, update activities
       oldActivity = oldPres.activities[i];
       newActivity = newPres.activities[i];
       break;
@@ -52,17 +54,21 @@ client.on("presenceUpdate", (oldPres, newPres) => {
   if (oldActivity == null || newActivity == null) {
     return;
   }
+  if(oldActivity.type == "PLAYING" && newActivity.type != "PLAYING") // If just finished a game, stretch
+  {
+    console.log(oldPres.user + " " + newPres.user)
+    printStretch(oldPres.user);
+  }
   console.log(newActivity.state);
 
   if (newActivity.state == null) {
     printStretch(newPres.user);
   }
-
 })
 
 function printStretch(userDM) {
   userDM.createDM().then(dmCh => {
-    dmCh.send("Time to Stretch");
+    dmCh.send(stretch_msgs[parseInt((Math.random()*stretch_msgs.length), 10)]);
   }).catch(error => {
     console.log(error + ", Error in creating DM");
   });
