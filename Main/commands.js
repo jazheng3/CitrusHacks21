@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 
 module.exports = {
-   reactionRole: function(channel) {
+   reactionRole: function(message) {
         const botApproveEmoji = '👍';
         const publicApproveEmoji = '👊';
      
@@ -13,16 +13,13 @@ module.exports = {
                 + `${botApproveEmoji} to allow bot to track usage\n`
                 + `${publicApproveEmoji} to allow wellness report to publish daily`);
                 
-        channel.send(embed).then(embed => {
+        message.send(embed).then(embed => {
             embed.react(botApproveEmoji);
             embed.react(publicApproveEmoji);
         });
 
-        client.on("messageReactionAdd", (reaction, user) =>{
-            if (reaction.emoji.name == botApproveEmoji) {
-                channel.send("Bot Approved");
-            }
-        })
+
+        
     }  
 }
 

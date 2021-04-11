@@ -80,12 +80,6 @@ function waterBreak() {
 }
 
 client.on("message", msg => {
-  if (msg.content === "-reactionrole") {
-    commands.reactionRole(msg.channel);
-  }
-})
-
-client.on("message", msg => {
   if (msg.content === "Time to drink some water! React 👍 after taking a drink!") {
     congralutoryWater(msg);
   }
@@ -110,9 +104,23 @@ function congralutoryWater(msg) {
   });
 }
 
-client.on("message", msg => {
-  if (msg === "-reactionbot") {
-    commands.reactionRole(msg.channel);
+client.on("message", message => {
+  if (message === "-reactionbot") {
+    commands.reactionRole(message.channel);
+    const filter = (reaction, user) => {
+      return reaction.emoji.name === '👍' && user.id === user.id;
+    };
+  
+    const collector = message.createReactionCollector(filter, { time: 100000 });
+  
+    collector.on('collect', (reaction, user) => {
+        console.log("Milk");
+        console.log(`Collected ${reaction.emoji.name} from ${user.tag}`);
+    });
+  
+    collector.on('end', collected => {
+        console.log(`Collected ${collected.size} items`);
+    });
   }
 })
 
