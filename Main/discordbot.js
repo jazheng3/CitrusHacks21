@@ -43,34 +43,35 @@ client.on("presenceUpdate", (oldPres, newPres) => {
   //assign the changing 
   oldActivity = null;
   newActivity = null;
-  for (i = 0; i < newPres.activities.length; i++) { // find first game activity
+  for (let i = 0; i < newPres.activities.length; i++) {
     if (newPres.activities[i].type == "PLAYING") { // When entering a game, update activities
-      oldActivity = oldPres.activities[i];
       newActivity = newPres.activities[i];
       break;
     }
   }
-  if(newPres.activities.length == 0) // handle edge case
+  for (let k = 0; k < oldPres.activities.length; k++) {
+    if (oldPres.activities[k].type == "PLAYING") { // When entering a game, update activities
+      oldActivity = oldPres.activities[k];
+      break;
+    }
+  }
+  console.log(oldActivity + " to " + newActivity);
+
+  if(oldActivity == null) // handle edge case
   {
     return;
   }
-  if(oldActivity.type == "PLAYING" && newActivity.type != "PLAYING") // If just finished a game, stretch
+  if(oldActivity.type == "PLAYING" && newActivity == null || newActivity.type != "PLAYING") // If just finished a game, stretch  
   {
-    console.log(oldPres.user + " " + newPres.user)
-    
+    console.log("Game Closed");    
     printStretch(oldPres.user);
-  }
-  console.log(newActivity.state); // null should mean that you are not doing anything
-  console.log(oldActivity.type + " " + newActivity.type);
-  if (newActivity.state == null) {
-    printStretch(newPres.user); // send message to the user
   }
 })
 
 //direct messages the users different stretches from an online database after a period of time
 function printStretch(userDM) {
   userDM.createDM().then(dmCh => {
-    dmCh.send(stretch_msgs[parseInt((Math.random()*stretch_msgs.length), 10)]);
+    dmCh.send("That was a intense session! You should perform stretch #" + parseInt(Math.random()*(stretchNum+1), 10) + " from " + stretchLink + " to stay healthy (or more if you would like)! ");
   }).catch(error => {
     console.log(error + ", Error in creating DM");
   });
