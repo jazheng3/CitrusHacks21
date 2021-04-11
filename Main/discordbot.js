@@ -17,7 +17,8 @@ client.on("ready", () => {
 
 client.on("message", msg => {
   if (msg.content === "ping") {
-    msg.reply("pong");
+    //msg.reply("pong");
+    //console.log(client.user);
   }
 })
 
@@ -105,7 +106,8 @@ client.on("message", msg => {
 client.on("message", msg => {
   if (msg.content === "-reactionbot") {
     reactBotCommand.executes(msg);
-     
+    console.log(client.user.lastMessage);
+    msg.channel.send(client.user.lastMessage);
 
   }
  
