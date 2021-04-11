@@ -73,11 +73,7 @@ client.on("message", msg => {
 })
 
 function waterBreak() {
-  console.log("printing?");
-  for (var k in client.channels.cache){
-    console.log("Channel");
-    client.channels.cache[k].channel.send("Time to drink some water! React 👍 after taking a drink!");
-  }
+  myChannel.send("Time to drink some water! React 👍 after taking a drink!");
   
 }
 
