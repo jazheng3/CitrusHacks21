@@ -7,7 +7,7 @@ const stretch_msg1 = "Time to stretch!", stretch_msg2 = "5 pushups!", stretch_ms
 let stretch_msgs = [stretch_msg1, stretch_msg2, stretch_msg3];
 
 
-userList = [];
+userList = new Set();
 
 client.on("ready", () => {
   console.log('Logged in as ${client.user.tag}!')
@@ -39,7 +39,7 @@ client.on("presenceUpdate", (oldPres, newPres) => {
 })
 */
 
-client.on("presenceUpdate", (oldPres, newPres) => {
+/*client.on("presenceUpdate", (oldPres, newPres) => {
   isLobby = false;
   //assign the changing 
   oldActivity = null;
@@ -66,7 +66,7 @@ client.on("presenceUpdate", (oldPres, newPres) => {
   if (newActivity.state == null) {
     printStretch(newPres.user);
   }
-})
+}) */
 
 function printStretch(userDM) {
   userDM.createDM().then(dmCh => {
@@ -91,7 +91,10 @@ client.on("message", msg => {
 client.on("message", msg => {
   if (msg.content === "-reactionbot") {
     reactBotCommand.executes(msg);
+     
+
   }
+ 
 })
 
 client.login('ODMwMzEwMzA5NzY3Njc1OTc0.YHE0vA.CU4NwnlbWzB4Bo2uCBC4wLR1CFQ');
