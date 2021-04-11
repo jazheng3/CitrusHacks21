@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
-const commands = require('./commands');
+const commands = require('./commands.js');
 
 
 
@@ -70,6 +70,12 @@ client.on("message", msg => {
   if (msg.content === "water") {
     messageAuthor = msg.author;
     msg.channel.send("Time to drink some water! React 👍 after taking a drink!");
+  }
+})
+
+client.on("message", msg => {
+  if (msg.content === "-reactionrole") {
+    commands.reactionRole(msg.channel);
   }
 })
 
