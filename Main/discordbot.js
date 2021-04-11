@@ -104,24 +104,24 @@ function congralutoryWater(msg) {
   });
 }
 
-client.on("message", message => {
-  if (message === "-reactionrole") {
-    commands.reactionRole(message.channel);
-    const filter = (reaction, user) => {
-      return reaction.emoji.name === '👍' && user.id === user.id;
-    };
-  
-    const collector = message.createReactionCollector(filter, { time: 100000 });
-  
-    collector.on('collect', (reaction, user) => {
-        console.log("Milk");
-        console.log(`Collected ${reaction.emoji.name} from ${user.tag}`);
-    });
-  
-    collector.on('end', collected => {
-        console.log(`Collected ${collected.size} items`);
-    });
+client.on("message", msg => {
+  if (msg.content === "-reactionrole") {
+    commands.reactionRole(msg.channel);
   }
+  const filter = (reaction, user) => {
+    return reaction.emoji.name === '👍' && user.id === user.id;
+  }; 
+
+  const collector = msg.createReactionCollector(filter, { time: 100000 });
+
+  collector.on('collect', (reaction, user) => {
+      console.log("Milk");
+      console.log(`Collected ${reaction.emoji.name} from ${user.tag}`);
+  });
+
+  collector.on('end', collected => {
+      console.log(`Collected ${collected.size} items`);
+  }); 
 })
 
 client.login('ODMwMzEwMzA5NzY3Njc1OTc0.YHE0vA.CU4NwnlbWzB4Bo2uCBC4wLR1CFQ');
