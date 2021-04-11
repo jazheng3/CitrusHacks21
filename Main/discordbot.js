@@ -3,9 +3,11 @@ const client = new Discord.Client();
 const reactBotCommand = require('./commands/reactionbot.js');
 const waterReminder = require('./commands/water.js');
 const waterCelebrate = require('./commands/waterCongrat.js');
-const stretch_msg1 = "Time to stretch!", stretch_msg2 = "5 pushups!", stretch_msg3 = "Stretch your hands!";
-let stretch_msgs = [stretch_msg1, stretch_msg2, stretch_msg3];
-
+//const stretch_msg1 = "Time to stretch!"
+//, stretch_msg2 = "5 pushups!", stretch_msg3 = "Stretch your hands!";
+//let stretch_msgs = [stretch_msg1, stretch_msg2, stretch_msg3];
+const stretchNum = 15;
+const stretchLink = "https://ehs.ucsc.edu/programs/ergo/stretch.html"
 
 userList = new Set();
 
@@ -39,38 +41,43 @@ client.on("presenceUpdate", (oldPres, newPres) => {
 })
 */
 
-/*client.on("presenceUpdate", (oldPres, newPres) => {
+client.on("presenceUpdate", (oldPres, newPres) => {
   isLobby = false;
   //assign the changing 
   oldActivity = null;
   newActivity = null;
-  for (i = 0; i < newPres.activities.length; i++) {
+  for (let i = 0; i < newPres.activities.length; i++) {
     if (newPres.activities[i].type == "PLAYING") { // When entering a game, update activities
-      oldActivity = oldPres.activities[i];
       newActivity = newPres.activities[i];
       break;
     }
   }
-  if(newPres.activities.length == 0)
+  for (let k = 0; k < oldPres.activities.length; k++) {
+    if (oldPres.activities[k].type == "PLAYING") { // When entering a game, update activities
+      oldActivity = oldPres.activities[k];
+      break;
+    }
+  }
+  console.log(oldActivity + " to " + newActivity);
+
+  if(oldActivity == null)
   {
     return;
   }
-  if(oldActivity.type == "PLAYING" && newActivity.type != "PLAYING") // If just finished a game, stretch
+  if(oldActivity.type == "PLAYING" && newActivity == null || newActivity.type != "PLAYING") // If just finished a game, stretch
   {
-    console.log(oldPres.user + " " + newPres.user)
-    
+    console.log("Game Closed");
     printStretch(oldPres.user);
   }
-  console.log(newActivity.state); // null should mean that you are not doing anything
-  console.log(oldActivity.type + " " + newActivity.type);
-  if (newActivity.state == null) {
-    printStretch(newPres.user);
-  }
-}) */
+  //console.log(newActivity.state); // null should mean that you are not doing anything
+  //if (newActivity.state == null) {
+  //  printStretch(newPres.user);
+  //}
+})
 
 function printStretch(userDM) {
   userDM.createDM().then(dmCh => {
-    dmCh.send(stretch_msgs[parseInt((Math.random()*stretch_msgs.length), 10)]);
+    dmCh.send("That was a intense session! You should perform stretch #" + parseInt(Math.random()*(stretchNum+1), 10) + " from " + stretchLink + " to stay healthy (or more if you would like)! ");
   }).catch(error => {
     console.log(error + ", Error in creating DM");
   });
