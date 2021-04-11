@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
-const commands = require('./commands.js');
-const storage = require('./user.js');
+const reactBotCommand = require('./commands/reactionbot.js');
+
 
 var myChannel;
 userList = new Set();
@@ -21,6 +21,8 @@ client.on("message", msg => {
     msg.reply(msg.author.presence.activities);
   }
 })
+}
+
 /*
 client.on("presenceUpdate", (oldPres, newPres) => {
   oldPres.user.createDM().then( dmCh => {
@@ -73,7 +75,11 @@ client.on("message", msg => {
 })
 
 function waterBreak() {
-  myChannel.send("Time to drink some water! React 👍 after taking a drink!");
+  console.log("printing?");
+  for (var k in client.channels.cache){
+    console.log("Channel");
+    client.channels.cache[k].channel.send("Time to drink some water! React 👍 after taking a drink!");
+  }
   
 }
 
@@ -106,25 +112,9 @@ function congralutoryWater(msg) {
 
 
 client.on("message", msg => {
-  if (msg.content === "-reactionrole") {
-    commands.reactionRole(msg.channel);
+  if (msg.content === "-reactionbot") {
+      reactBotCommand.executes(msg);
   }
-  const filter = (reaction, user) => {
-    return reaction.emoji.name === '👍' && user.id === user.id;
-  }; 
-
-  const collector = msg.createReactionCollector(filter, { time: 100000 });
-
-  collector.on('collect', (reaction, user) => {
-      let ben = new storage.User(user.tag, user.id);
-      userList.push(ben);
-      console.log(`Collected ${reaction.emoji.name} from ${user.tag}`);
-      console.log(userList);
-  });
-
-  collector.on('end', collected => {
-      console.log(`Collected ${collected.size} items`);
-  }); 
 })
 
 
