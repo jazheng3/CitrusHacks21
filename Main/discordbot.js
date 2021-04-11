@@ -1,10 +1,11 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const reactBotCommand = require('./commands/reactionbot.js');
+const waterReminder = require('./commands/water.js');
+const waterCelebrate = require('./commands/waterCongrat.js');
 
 
-var myChannel;
-let userSet = new Set();
+userList = [];
 
 client.on("ready", () => {
   console.log('Logged in as ${client.user.tag}!')
@@ -69,90 +70,24 @@ function printStretch(userDM) {
 
 client.on("message", msg => {
   if (msg.content === "!water") {
-    myChannel = msg.channel;
-    makeHourlyReminders();
+    waterReminder.executes(msg.channel);
   }
 })
-
-function waterBreak() {
-  myChannel.send("Time to drink some water! React 👍 after taking a drink!");
-
-}
 
 client.on("message", msg => {
   if (msg.content === "Time to drink some water! React 👍 after taking a drink!") {
-    congralutoryWater(msg);
-    
+    waterCelebrate.executes(msg);
   }
 })
-
-function congralutoryWater(msg) {
-  const filter = (reaction, user) => {
-    return reaction.emoji.name === '👍';
-  };
-
-  const collector = msg.createReactionCollector(filter, { time: 15000 });
-
-  collector.on('collect', (reaction, user) => {
-    console.log(`Collected ${reaction.emoji.name} from ${user.tag}`);
-    msg.react('👊');
-    usernameToUser(user).addWater();
-    msg.channel.send(`Good job @${user.tag}! Now you can go back to playing games.`);
-    myChannel.send("You have drank water " + usernameToUser(user).numWaterBreaks + " today!");
-  });
-
-  collector.on('end', collected => {
-    console.log(`Collected ${collected.size} items`);
-    collector.stop();
-  });
-}
-
-
-
 
 client.on("message", msg => {
-  if (msg.content === "-reactionrole") {
-    commands.reactionRole(msg.channel);
-
-    const filter = (reaction, user) => {
-      return reaction.emoji.name === '👍' && user.id === user.id;
-    };
-
-    const collector = msg.createReactionCollector(filter, { time: 100000 });
-
-    collector.on('collect', (reaction, user) => {
-      let ben = new storage.User(user.tag, user.id);
-      userSet.push(ben);
-      console.log(`Collected ${reaction.emoji.name} from ${user.tag}`);
-      console.log(userSet);
-    });
-
-    collector.on('end', collected => {
-      console.log(`Collected ${collected.size} items`);
-    });
+  if (msg.content === "-reactionbot") {
+    reactBotCommand.executes(msg);
   }
 })
-
-
-
-
-
 
 client.login('ODMwMzEwMzA5NzY3Njc1OTc0.YHE0vA.CU4NwnlbWzB4Bo2uCBC4wLR1CFQ');
 
-function makeHourlyReminders() {
-  var nextDate = new Date();
-  if (nextDate.getMinutes() === 0) { // You can check for seconds here too
-    return sendReminder();
-  } else {
-    nextDate.setHours(nextDate.getHours() + 1);
-    nextDate.setMinutes(0);
-    nextDate.setSeconds(0);// I wouldn't do milliseconds too ;)
-
-    var difference = nextDate - new Date();
-    return setTimeout(sendReminder, 3000);
-  }
-}
 
 function sendReminder() {
   return setInterval(waterBreak, 3000);
