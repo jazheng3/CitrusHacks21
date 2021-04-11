@@ -71,7 +71,12 @@ client.on("message", msg => {
 })
 
 function waterBreak() {
-  myChannel.send("Time to drink some water! React 👍 after taking a drink!");
+  console.log("printing?");
+  for (var k in client.channels.cache){
+    console.log("Channel");
+    client.channels.cache[k].channel.send("Time to drink some water! React 👍 after taking a drink!");
+  }
+  
 }
 
 client.on("message", msg => {
@@ -111,7 +116,7 @@ client.on("message", msg => {
   }
 })
 
-client.login('ODMwMzEwMzA5NzY3Njc1OTc0.YHE0vA.3UaDnhS1L72oiJZjyQsvrkC6Dzg');
+client.login('ODMwMzEwMzA5NzY3Njc1OTc0.YHE0vA.CU4NwnlbWzB4Bo2uCBC4wLR1CFQ');
 
 function makeHourlyReminders() {
   var nextDate = new Date();
@@ -123,10 +128,10 @@ function makeHourlyReminders() {
     nextDate.setSeconds(0);// I wouldn't do milliseconds too ;)
 
     var difference = nextDate - new Date();
-    return setTimeout(sendReminder, 10000);
+    return setTimeout(sendReminder, 3000);
   }
 }
 
 function sendReminder() {
-  return setInterval(waterBreak, 5000);
+  return setInterval(waterBreak, 3000);
 }
