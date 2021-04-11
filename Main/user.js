@@ -1,14 +1,16 @@
 class User {
-    constructor(discordusername, discordID, timeActivityStart, timeActivityEnd, numStretches, numWaterBreaks, waterList) {
-        this.discordusername = discordusername;
+    waterList = [];
+    constructor(discordUsername, discordID, timeActivityStart, timeActivityEnd, numStretches, numWaterBreaks) {
+        this.discordUsername = discordUsername;
         this.discordID = discordID;
         this.timeActivityStart = timeActivityStart; 
         this.timeActivityEnd = timeActivityEnd;
         this.numStretches = numStretches; 
         this.numWaterBreaks = numWaterBreaks;
-        this.waterList = waterList;
     }
 
-    
+    addWater(time) {
+        waterList.push(time);
+    }
 }
 
