@@ -3,11 +3,8 @@ const client = new Discord.Client();
 const reactBotCommand = require('./commands/reactionbot.js');
 const waterReminder = require('./commands/water.js');
 const waterCelebrate = require('./commands/waterCongrat.js');
-//const stretch_msg1 = "Time to stretch!"
-//, stretch_msg2 = "5 pushups!", stretch_msg3 = "Stretch your hands!";
-//let stretch_msgs = [stretch_msg1, stretch_msg2, stretch_msg3];
-const stretchNum = 15;
-const stretchLink = "https://ehs.ucsc.edu/programs/ergo/stretch.html"
+const stretch_msg1 = "Time to stretch!", stretch_msg2 = "5 pushups!", stretch_msg3 = "Stretch your hands!";
+let stretch_msgs = [stretch_msg1, stretch_msg2, stretch_msg3];
 
 userList = [];
 
@@ -17,8 +14,7 @@ client.on("ready", () => {
 
 client.on("message", msg => {
   if (msg.content === "ping") {
-    //msg.reply("pong");
-    //console.log(client.user);
+    msg.reply("pong");
   }
 })
 
@@ -47,38 +43,33 @@ client.on("presenceUpdate", (oldPres, newPres) => {
   //assign the changing 
   oldActivity = null;
   newActivity = null;
-  for (let i = 0; i < newPres.activities.length; i++) {
+  for (i = 0; i < newPres.activities.length; i++) { // find first game activity
     if (newPres.activities[i].type == "PLAYING") { // When entering a game, update activities
+      oldActivity = oldPres.activities[i];
       newActivity = newPres.activities[i];
       break;
     }
   }
-  for (let k = 0; k < oldPres.activities.length; k++) {
-    if (oldPres.activities[k].type == "PLAYING") { // When entering a game, update activities
-      oldActivity = oldPres.activities[k];
-      break;
-    }
-  }
-  console.log(oldActivity + " to " + newActivity);
-
-  if(oldActivity == null)
+  if(newPres.activities.length == 0) // handle edge case
   {
     return;
   }
-  if(oldActivity.type == "PLAYING" && newActivity == null || newActivity.type != "PLAYING") // If just finished a game, stretch
+  if(oldActivity.type == "PLAYING" && newActivity.type != "PLAYING") // If just finished a game, stretch
   {
-    console.log("Game Closed");
+    console.log(oldPres.user + " " + newPres.user)
+    
     printStretch(oldPres.user);
   }
-  //console.log(newActivity.state); // null should mean that you are not doing anything
-  //if (newActivity.state == null) {
-  //  printStretch(newPres.user);
-  //}
+  console.log(newActivity.state); // null should mean that you are not doing anything
+  console.log(oldActivity.type + " " + newActivity.type);
+  if (newActivity.state == null) {
+    printStretch(newPres.user); // send message to the user
+  }
 })
 
 function printStretch(userDM) {
   userDM.createDM().then(dmCh => {
-    dmCh.send("That was a intense session! You should perform stretch #" + parseInt(Math.random()*(stretchNum+1), 10) + " from " + stretchLink + " to stay healthy (or more if you would like)! ");
+    dmCh.send(stretch_msgs[parseInt((Math.random()*stretch_msgs.length), 10)]);
   }).catch(error => {
     console.log(error + ", Error in creating DM");
   });
@@ -92,37 +83,13 @@ client.on("message", msg => {
 
 client.on("message", msg => {
   if (msg.content === "Time to drink some water! React 👍 after taking a drink!") {
-    var userID = waterCelebrate.executes(msg);
-    console.log(userID + "user after sneding");
-    for(i = 0; i < userList.length;i++) {
-      msg.channel.send(userList[i].numWaterBreaks + "number of waters");
-      if (userList[i].discordID === userID) {
-        userList[i].addWater();
-        
-      }
-    }
+    waterCelebrate.executes(msg);
   }
 })
 
 client.on("message", msg => {
   if (msg.content === "-reactionbot") {
     reactBotCommand.executes(msg);
-    console.log(client.user.lastMessage);
-    //msg.channel.send(client.user.lastMessage);
-
-  }
- 
-})
-
-client.on("message", msg => {
-  //console.log("meme");
-  if(msg.content === "!leaderboard") {
-    //console.log("if");
-    for (num in leaderboard(msg)) {
-      //console.log("for?");
-      console.log(num);
-      msg.channel.send()
-    }
   }
 })
 
@@ -134,23 +101,10 @@ function sendReminder() {
 }
 
 function usernameToUser(username) {
-  for(user in userList) {
+  for(user in userSet) {
     if(user.discordID = username.id) {
       return user;
     }
   }
   return null;
-}
-
-function leaderboard(msg) {
-  console.log("leaderboard");
-  waterList = [];
-  nameList = [];
-  for(i = 0; i < userList.length;i++) {
-    waterList.push(userList[i].numWaterBreaks);
-    nameList.push(userList[i].getName());
-  }
-  //waterList.sort();
-  msg.channel.send(nameList + "\n" + waterList);
-  return waterList;
 }
