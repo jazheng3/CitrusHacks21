@@ -105,7 +105,7 @@ function congralutoryWater(msg) {
 }
 
 client.on("message", message => {
-  if (message === "-reactionbot") {
+  if (message === "-reactionrole") {
     commands.reactionRole(message.channel);
     const filter = (reaction, user) => {
       return reaction.emoji.name === '👍' && user.id === user.id;
