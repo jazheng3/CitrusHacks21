@@ -3,7 +3,7 @@ const client = new Discord.Client();
 const reactBotCommand = require('./commands/reactionbot.js');
 const waterReminder = require('./commands/water.js');
 const waterCelebrate = require('./commands/waterCongrat.js');
-const stretch_msg1 = "Time to stretch!", stretch_msg2 = "placeholder", stretch_msg3 = "placeholder";
+const stretch_msg1 = "Time to stretch!", stretch_msg2 = "5 pushups!", stretch_msg3 = "Stretch your hands!";
 let stretch_msgs = [stretch_msg1, stretch_msg2, stretch_msg3];
 
 
@@ -51,16 +51,18 @@ client.on("presenceUpdate", (oldPres, newPres) => {
       break;
     }
   }
-  if (oldActivity == null || newActivity == null) {
+  if(newPres.activities.length == 0)
+  {
     return;
   }
   if(oldActivity.type == "PLAYING" && newActivity.type != "PLAYING") // If just finished a game, stretch
   {
     console.log(oldPres.user + " " + newPres.user)
+    
     printStretch(oldPres.user);
   }
-  console.log(newActivity.state);
-
+  console.log(newActivity.state); // null should mean that you are not doing anything
+  console.log(oldActivity.type + " " + newActivity.type);
   if (newActivity.state == null) {
     printStretch(newPres.user);
   }
