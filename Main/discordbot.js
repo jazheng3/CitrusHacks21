@@ -1,47 +1,42 @@
+require('dotenv').config({path:'./bot_key.env'});
+
 const Discord = require('discord.js');
 const client = new Discord.Client();
+
 const reactBotCommand = require('./commands/reactionbot.js');
 const waterReminder = require('./commands/water.js');
 const waterCelebrate = require('./commands/waterCongrat.js');
-//const stretch_msg1 = "Time to stretch!"
-//, stretch_msg2 = "5 pushups!", stretch_msg3 = "Stretch your hands!";
-//let stretch_msgs = [stretch_msg1, stretch_msg2, stretch_msg3];
+
 const stretchNum = 15;
 const stretchLink = "https://ehs.ucsc.edu/programs/ergo/stretch.html"
 
 userList = [];
 
+const bot_key = process.env.BOT_KEY;
+//activates discord's bot services
+client.login(bot_key);
+
+//Login message to know the bot is operational
 client.on("ready", () => {
   console.log('Logged in as ${client.user.tag}!')
 })
 
+//Simple test for bot usage
 client.on("message", msg => {
   if (msg.content === "ping") {
-    //msg.reply("pong");
+    msg.reply("pong");
     //console.log(client.user);
   }
 })
 
+//Test for activities currently being run
 client.on("message", msg => {
   if (msg.content === "act") {
     msg.reply(msg.author.presence.activities);
   }
 })
 
-
-/*
-client.on("presenceUpdate", (oldPres, newPres) => {
-  oldPres.user.createDM().then( dmCh => {
-    dmCh.send("Presence Changed, " + oldPres.activities[0].name + 
-      ", "+ oldPres.activities[0].type + " to " + 
-      newPres.activities[0].name + 
-      ", "+ newPres.activities[0].type);
-  }).catch(error => {
-    console.log(error + ", Error in creating DM");
-  });
-})
-*/
-
+//Tells users whenever a game is closed, i.e. whenever your presence on discord has changed
 client.on("presenceUpdate", (oldPres, newPres) => {
   isLobby = false;
   //assign the changing 
@@ -76,6 +71,7 @@ client.on("presenceUpdate", (oldPres, newPres) => {
   //}
 })
 
+//direct messages the users different stretches from an online database after a period of time
 function printStretch(userDM) {
   userDM.createDM().then(dmCh => {
     dmCh.send("That was a intense session! You should perform stretch #" + parseInt(Math.random()*(stretchNum+1), 10) + " from " + stretchLink + " to stay healthy (or more if you would like)! ");
@@ -84,14 +80,18 @@ function printStretch(userDM) {
   });
 }
 
+//activates the water reminder service for user
 client.on("message", msg => {
   if (msg.content === "!water") {
     waterReminder.executes(msg.channel);
   }
 })
 
+//generates the message for water reminder and updates the stats of the user
 client.on("message", msg => {
   if (msg.content === "Time to drink some water! React 👍 after taking a drink!") {
+    //detects when user reacts specified emoji and looks for their representive object
+    //in an array to update their water count
     var userID = waterCelebrate.executes(msg);
     console.log(userID + "user after sneding");
     for(i = 0; i < userList.length;i++) {
@@ -104,18 +104,17 @@ client.on("message", msg => {
   }
 })
 
+//activates the reactionbot, which prompts user to react to a message if they
+//want to have the bot track their water usage
 client.on("message", msg => {
   if (msg.content === "-reactionbot") {
     reactBotCommand.executes(msg);
     console.log(client.user.lastMessage);
-    //msg.channel.send(client.user.lastMessage);
-
   }
- 
 })
 
+//Generates a leaderboard of the amount of water all users have drinked
 client.on("message", msg => {
-  //console.log("meme");
   if(msg.content === "!leaderboard") {
     //console.log("if");
     for (num in leaderboard(msg)) {
@@ -126,11 +125,9 @@ client.on("message", msg => {
   }
 })
 
-client.login('ODMwMzEwMzA5NzY3Njc1OTc0.YHE0vA.CU4NwnlbWzB4Bo2uCBC4wLR1CFQ');
-
-
+//function that gives timely reminders, specifically for a waterbreak here
 function sendReminder() {
-  return setInterval(waterBreak, 3000);
+  return setInterval(waterBreak, 3000);//every 3 seconds as of now
 }
 
 function usernameToUser(username) {
@@ -142,6 +139,7 @@ function usernameToUser(username) {
   return null;
 }
 
+//leaderboard function that tries to create a simple display for comparing users' water drinking
 function leaderboard(msg) {
   console.log("leaderboard");
   waterList = [];
