@@ -98,8 +98,6 @@ client.on("message", msg => {
         user.addWater();
       }
     }
-
-    msg.reactions.cache.get()
   }
 })
 
