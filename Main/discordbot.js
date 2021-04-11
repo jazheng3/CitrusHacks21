@@ -4,7 +4,7 @@ const commands = require('./commands.js');
 const storage = require('./user.js');
 
 var myChannel;
-userList = [];
+userList = new Set();
 
 client.on("ready", () => {
   console.log('Logged in as ${client.user.tag}!')
