@@ -1,6 +1,6 @@
 module.exports = {
     name: 'waterCongrat',
-    description: 'Congragulates user on drinking water',
+    description: 'Congratulates user on drinking water',
     executes (message) {
         
             const filter = (reaction, user) => {
@@ -13,12 +13,12 @@ module.exports = {
               console.log(`Collected ${reaction.emoji.name} from ${user.tag}`);
               msg.react('👊');
               msg.channel.send(`Good job @${user.tag}! Now you can go back to playing games.`);
+              return user.id;
             });
           
             collector.on('end', collected => {
               console.log(`Collected ${collected.size} items`);
               collector.stop();
             });
-          
     }
 }

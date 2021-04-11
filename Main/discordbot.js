@@ -91,7 +91,14 @@ client.on("message", msg => {
 
 client.on("message", msg => {
   if (msg.content === "Time to drink some water! React 👍 after taking a drink!") {
-    waterCelebrate.executes(msg);
+    var userID = waterCelebrate.executes(msg);
+    for(user in userList) {
+      if (user.discordID === userID) {
+        user.addWater();
+      }
+    }
+
+    msg.reactions.cache.get()
   }
 })
 
@@ -104,6 +111,14 @@ client.on("message", msg => {
  
 })
 
+client.on("message", msg => {
+  if(msg.content === "!leaderboard") {
+    for (num in leaderboard()) {
+      console.log(num);
+    }
+  }
+})
+
 client.login('ODMwMzEwMzA5NzY3Njc1OTc0.YHE0vA.CU4NwnlbWzB4Bo2uCBC4wLR1CFQ');
 
 
@@ -112,10 +127,20 @@ function sendReminder() {
 }
 
 function usernameToUser(username) {
-  for(user in userSet) {
+  for(user in userList) {
     if(user.discordID = username.id) {
       return user;
     }
   }
   return null;
+}
+
+function leaderboard() {
+  waterList = [];
+  for(user in userList) {
+    waterList.push(user.numWaterBreaks);
+  }
+  waterList.sort();
+
+  return waterList;
 }
