@@ -27,8 +27,9 @@ module.exports = {
         collector = message.createReactionCollector(filter, { time: 100000 });
         collector.on('collect', (reaction, user) => {
             let newUser = new storage.User(user.tag, user.id);
-            userList.add(newUser);
+            userList.push(newUser);
             console.log(newUser);
+            console.log(userList);
         });
       
         collector.on('end', collected => {

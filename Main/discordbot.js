@@ -9,7 +9,7 @@ const waterCelebrate = require('./commands/waterCongrat.js');
 const stretchNum = 15;
 const stretchLink = "https://ehs.ucsc.edu/programs/ergo/stretch.html"
 
-userList = new Set();
+userList = [];
 
 client.on("ready", () => {
   console.log('Logged in as ${client.user.tag}!')
@@ -93,9 +93,12 @@ client.on("message", msg => {
 client.on("message", msg => {
   if (msg.content === "Time to drink some water! React 👍 after taking a drink!") {
     var userID = waterCelebrate.executes(msg);
-    for(user in userList) {
-      if (user.discordID === userID) {
-        user.addWater();
+    console.log(userID + "user after sneding");
+    for(i = 0; i < userList.length;i++) {
+      msg.channel.send(userList[i].numWaterBreaks + "number of waters");
+      if (userList[i].discordID === userID) {
+        userList[i].addWater();
+        
       }
     }
   }
@@ -105,19 +108,20 @@ client.on("message", msg => {
   if (msg.content === "-reactionbot") {
     reactBotCommand.executes(msg);
     console.log(client.user.lastMessage);
-    msg.channel.send(client.user.lastMessage);
+    //msg.channel.send(client.user.lastMessage);
 
   }
  
 })
 
 client.on("message", msg => {
-  console.log("meme");
+  //console.log("meme");
   if(msg.content === "!leaderboard") {
-    console.log("if");
-    for (num in leaderboard()) {
-      console.log("for?");
+    //console.log("if");
+    for (num in leaderboard(msg)) {
+      //console.log("for?");
       console.log(num);
+      msg.channel.send()
     }
   }
 })
@@ -138,14 +142,15 @@ function usernameToUser(username) {
   return null;
 }
 
-function leaderboard() {
+function leaderboard(msg) {
   console.log("leaderboard");
   waterList = [];
-  for(user in userList) {
-    console.log("user");
-    waterList.push(user.numWaterBreaks);
+  nameList = [];
+  for(i = 0; i < userList.length;i++) {
+    waterList.push(userList[i].numWaterBreaks);
+    nameList.push(userList[i].getName());
   }
-  waterList.sort();
-
+  //waterList.sort();
+  msg.channel.send(nameList + "\n" + waterList);
   return waterList;
 }

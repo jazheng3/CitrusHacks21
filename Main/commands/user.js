@@ -9,7 +9,11 @@
     }
 
     addWater() {
-        this.numWaterBreaks++;
+        this.numWaterBreaks = this.numWaterBreaks + 1;
+    }
+
+    getName() {
+        return this.discordUsername;
     }
 }
 
