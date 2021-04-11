@@ -1,8 +1,10 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const commands = require('./commands.js');
+const storage = require('./user.js');
 
 var myChannel;
+userList = [];
 
 client.on("ready", () => {
   console.log('Logged in as ${client.user.tag}!')
@@ -104,6 +106,9 @@ function congralutoryWater(msg) {
   });
 }
 
+
+
+
 client.on("message", msg => {
   if (msg.content === "-reactionrole") {
     commands.reactionRole(msg.channel);
@@ -115,14 +120,21 @@ client.on("message", msg => {
   const collector = msg.createReactionCollector(filter, { time: 100000 });
 
   collector.on('collect', (reaction, user) => {
-      console.log("Milk");
+      let ben = new storage.User(user.tag, user.id);
+      userList.push(ben);
       console.log(`Collected ${reaction.emoji.name} from ${user.tag}`);
+      console.log(userList);
   });
 
   collector.on('end', collected => {
       console.log(`Collected ${collected.size} items`);
   }); 
 })
+
+
+
+
+
 
 client.login('ODMwMzEwMzA5NzY3Njc1OTc0.YHE0vA.CU4NwnlbWzB4Bo2uCBC4wLR1CFQ');
 
